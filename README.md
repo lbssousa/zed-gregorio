@@ -9,16 +9,16 @@ Adds support for **GABC/NABC** (Gregorian chant notation) files to [Zed](https:/
 - **Bracket Matching** — Auto-matching for `()`, `[]`, `{}`, and `<>`.
 - **Code Outline** — Headers appear in the document outline/symbols panel.
 - **Language Server** — Diagnostics, hover, completion, and document symbols via [gregorio-lsp](https://github.com/AISCGre-BR/gregorio-lsp).
-- **Document Formatting** — Format `.gabc` files via **Format Document** (`Alt+Shift+F` / `⌥⇧F`) or on save, powered by [grefmt](https://github.com/AISCGre-BR/gregorio-lsp) (part of `gregorio-lsp ≥ 0.8.0`).
+- **Document Formatting** — Format `.gabc` files via **Format Document** (`Alt+Shift+F` / `⌥⇧F`) or on save, powered by [grefmt](https://github.com/AISCGre-BR/gregorio-lsp) (part of `gregorio-lsp ≥ 0.9.0`).
 
 ## Prerequisites
 
 For **Language Server** features (diagnostics, hover, completions, **formatting**):
 
-Install `gregorio-lsp` via Cargo (v0.8.0 or later includes the `grefmt` formatter):
+Install `gregorio-lsp` via Cargo (v0.9.0 or later includes the `grefmt` formatter):
 ```sh
 cargo install --git https://github.com/aiscgre-br/gregorio-lsp \
-  --tag v0.8.0 --bin gregorio-lsp
+  --tag v0.9.0 --bin gregorio-lsp
 ```
 
 Make sure `~/.cargo/bin` is in your PATH. Syntax highlighting works without any prerequisites.
