@@ -122,7 +122,28 @@ latest tagged release.
 **Do NOT add npm/npx fallback** — `gregorio-lsp` is a Rust binary distributed via
 Cargo, not a Node.js package.
 
-### 4.3 Query Files (`languages/gabc/`)
+### 4.3 Formatter (`languages/gabc/config.toml`)
+
+`languages/gabc/config.toml` declares:
+
+```toml
+formatter = { language_server = { name = "gregorio-lsp" } }
+```
+
+This routes Zed's **Format Document** command (`⌥⇧F` / `Alt+Shift+F`) and
+format-on-save to the `gregorio-lsp` language server, which implements
+`textDocument/formatting` using the same formatting engine as the standalone
+`grefmt` CLI (`gregorio_lsp::format::format_gabc_text`).
+
+Formatting options (`maxLineWidth`, `breakAfterClef`, `breakAfterBar`) are
+configured by the user via `lsp.gregorio-lsp.settings.formatting` in Zed's
+`settings.json`; the server receives them through `workspace/didChangeConfiguration`.
+
+**Do NOT switch to an external formatter** pointing at the `grefmt` binary:
+the LSP approach is preferred because it keeps a single running process,
+respects workspace configuration, and requires no extra binary in PATH.
+
+### 4.4 Query Files (`languages/gabc/`)
 
 The `.scm` files are evaluated by Zed's tree-sitter integration. They consume node
 kinds and field names from `tree-sitter-gregorio`.

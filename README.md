@@ -9,15 +9,16 @@ Adds support for **GABC/NABC** (Gregorian chant notation) files to [Zed](https:/
 - **Bracket Matching** — Auto-matching for `()`, `[]`, `{}`, and `<>`.
 - **Code Outline** — Headers appear in the document outline/symbols panel.
 - **Language Server** — Diagnostics, hover, completion, and document symbols via [gregorio-lsp](https://github.com/AISCGre-BR/gregorio-lsp).
+- **Document Formatting** — Format `.gabc` files via **Format Document** (`Alt+Shift+F` / `⌥⇧F`) or on save, powered by [grefmt](https://github.com/AISCGre-BR/gregorio-lsp) (part of `gregorio-lsp ≥ 0.8.0`).
 
 ## Prerequisites
 
-For **Language Server** features (diagnostics, hover, completions):
+For **Language Server** features (diagnostics, hover, completions, **formatting**):
 
-Install `gregorio-lsp` via Cargo:
+Install `gregorio-lsp` via Cargo (v0.8.0 or later includes the `grefmt` formatter):
 ```sh
 cargo install --git https://github.com/aiscgre-br/gregorio-lsp \
-  --tag v0.7.0 --bin gregorio-lsp
+  --tag v0.8.0 --bin gregorio-lsp
 ```
 
 Make sure `~/.cargo/bin` is in your PATH. Syntax highlighting works without any prerequisites.
@@ -36,6 +37,51 @@ Search for "Gregorio" in **Zed → Extensions**.
 ## Grammar
 
 This extension uses [tree-sitter-gregorio](https://github.com/AISCGre-BR/tree-sitter-gregorio) (v0.5.2, commit `c9034de8`), a complete tree-sitter grammar for GABC+NABC notation compatible with Gregorio 6.2.0.
+
+## Formatting
+
+Formatting is provided by the `gregorio-lsp` language server (which embeds `grefmt`). No additional binary is required beyond the `gregorio-lsp` server already installed for diagnostics.
+
+### Using the formatter
+
+- **Format Document**: `Alt+Shift+F` (Linux/Windows) or `⌥⇧F` (macOS)
+- **Format on save**: add to your Zed `settings.json`:
+  ```json
+  {
+    "languages": {
+      "GABC": {
+        "format_on_save": "on"
+      }
+    }
+  }
+  ```
+
+### Formatter options
+
+Configure via the `formatting` key in Zed's LSP settings (`settings.json`):
+
+```json
+{
+  "lsp": {
+    "gregorio-lsp": {
+      "initialization_options": {},
+      "settings": {
+        "formatting": {
+          "maxLineWidth": 80,
+          "breakAfterClef": false,
+          "breakAfterBar": false
+        }
+      }
+    }
+  }
+}
+```
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `maxLineWidth` | integer | `80` | Maximum characters per notation line |
+| `breakAfterClef` | boolean | `false` | Insert a blank line after each clef token |
+| `breakAfterBar` | boolean | `false` | Insert a blank line after each bar token |
 
 ## License
 

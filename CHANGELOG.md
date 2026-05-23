@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Document Formatting** via `gregorio-lsp`'s built-in `grefmt` formatter
+  (`textDocument/formatting` LSP capability, requires `gregorio-lsp ≥ 0.8.0`).
+  `languages/gabc/config.toml` now declares
+  `formatter = { language_server = { name = "gregorio-lsp" } }` so Zed routes
+  **Format Document** (`⌥⇧F` / `Alt+Shift+F`) and format-on-save through the
+  language server without additional configuration. Formatting options
+  (`maxLineWidth`, `breakAfterClef`, `breakAfterBar`) are configurable via
+  the `lsp.gregorio-lsp.settings.formatting` key in Zed `settings.json`.
+
+### Changed
+- `gregorio-lsp` minimum required version updated to **v0.8.0** in install
+  instructions (`src/lib.rs`, `README.md`).
+
 ## [0.7.0] - 2026-05-16
 
 ### Changed
