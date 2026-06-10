@@ -4,3 +4,4 @@ extension.wasm
 grammars/*.wasm
 grammars/gregorio/
 grammars/tree-sitter-gregorio/
+.direnv
