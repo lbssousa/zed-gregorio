@@ -110,14 +110,26 @@ git -C /path/to/tree-sitter-gregorio rev-list -n 1 vX.Y.Z
 
 ### 4.2 Language Server Detection (`src/lib.rs`)
 
-`language_server_command()` searches for the `gregorio-lsp` binary using
-`worktree.which()`. The lookup order is:
+`language_server_command()` resolves the `gregorio-lsp` binary in this order:
 
-1. First hit of `gregorio-lsp` in `PATH` (e.g. installed via `cargo install`)
-2. Cached path from a previous successful lookup
+1. `lsp.gregorio-lsp.binary.path` from Zed settings (`LspSettings::for_worktree`);
+   `binary.arguments` / `binary.env` are honoured too (default args: `--stdio`)
+2. First hit of `gregorio-lsp` in `PATH` via `worktree.which()` (e.g. `cargo install`)
+3. Binary downloaded earlier in the session (`cached_binary_path`)
+4. Download of the latest non-prerelease GitHub Release of `AISCGre-BR/gregorio-lsp`
+   via `zed::latest_github_release` + `zed::download_file`, extracted into
+   `gregorio-lsp-<version>/` in the extension's working directory; older
+   version directories are removed
+5. If the download fails (e.g. offline), a previously downloaded binary
 
-If not found, returns an error with `cargo install` instructions pointing to the
-latest tagged release.
+If everything fails, the error carries `cargo install` instructions pointing to
+the latest tagged release.
+
+The asset names are a contract with gregorio-lsp's `release.yml`:
+`gregorio-lsp-<rust-target>.tar.gz` (Linux/macOS, `*-unknown-linux-musl` and
+`*-apple-darwin`) and `gregorio-lsp-<rust-target>.zip` (Windows,
+`*-pc-windows-msvc`), with the executables at the archive root. Keep
+`release_target()` in sync with that workflow.
 
 **Do NOT add npm/npx fallback** — `gregorio-lsp` is a Rust binary distributed via
 Cargo, not a Node.js package.
@@ -280,7 +292,7 @@ There is no automated test suite for the extension itself. Testing is done manua
 | Project | Role |
 |---|---|
 | [tree-sitter-gregorio](https://github.com/aiscgre-br/tree-sitter-gregorio) | Grammar source; pinned via `rev` in `extension.toml` |
-| [gregorio-lsp](https://github.com/aiscgre-br/gregorio-lsp) | LSP server binary (`gregorio-lsp`); installed separately by the user |
+| [gregorio-lsp](https://github.com/aiscgre-br/gregorio-lsp) | LSP server binary (`gregorio-lsp`); downloaded from its GitHub Releases or installed by the user |
 
 When either companion project releases a new version, update this extension accordingly
 (see §6).
