@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Automatic gregorio-lsp installation**: when `gregorio-lsp` is not on
+  `PATH`, the extension downloads the latest prebuilt binary for the current
+  platform from the gregorio-lsp GitHub Releases (Linux/macOS/Windows,
+  x86-64/ARM64), keeps it up to date and removes older downloads. Falls back
+  to a previously downloaded binary when offline. Requires gregorio-lsp
+  releases with prebuilt assets (`gregorio-lsp-<rust-target>.tar.gz` / `.zip`).
+- `lsp.gregorio-lsp.binary` settings (`path`, `arguments`, `env`) are honoured
+  and take precedence over `PATH` and the download.
+
 ## [0.9.0] - 2026-11-19
 
 ### Changed

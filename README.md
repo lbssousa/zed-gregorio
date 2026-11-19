@@ -23,21 +23,43 @@ Adds support for **GABC/NABC** (Gregorian chant notation) files to [Zed](https:/
 - **Quick Fixes** — Auto-fixes for many diagnostics (e.g. `bar-mixed-with-notes`, `line-break-not-at-end`, `nabc-space-in-code`) through Zed's code actions menu.
 - **Document Formatting** — Format `.gabc` files via **Format Document** (`Alt+Shift+F` / `⌥⇧F`) or on save, powered by [grefmt](https://github.com/AISCGre-BR/gregorio-lsp), including the word-per-line layout for long GABC+NABC scores.
 
-## Prerequisites
+## Language server
 
-For **Language Server** features (diagnostics, hover, completions, **formatting**):
+Language server features (diagnostics, quick fixes, hover, completion,
+formatting) are provided by
+[gregorio-lsp](https://github.com/AISCGre-BR/gregorio-lsp). **No manual
+installation is needed**: the extension resolves the server in this order:
 
-Install `gregorio-lsp` via Cargo (v0.13.0 recommended; v0.12.0 or later is
-required for `wordPerLine`):
+1. `lsp.gregorio-lsp.binary.path` in Zed's `settings.json`, if set;
+2. a `gregorio-lsp` executable on your `PATH`;
+3. otherwise, the latest prebuilt binary for your platform is downloaded from
+   the [gregorio-lsp releases](https://github.com/AISCGre-BR/gregorio-lsp/releases)
+   (Linux, macOS and Windows on x86-64 and ARM64) and kept up to date
+   automatically.
+
+To use your own build instead, install it with Cargo (the `gregorio-server`
+package name is required since gregorio-lsp v0.11.0):
+
 ```sh
 cargo install --git https://github.com/AISCGre-BR/gregorio-lsp \
   --tag v0.13.0 gregorio-server --bin gregorio-lsp
 ```
 
-Since gregorio-lsp v0.11.0 the repository is a Cargo workspace, so the
-`gregorio-server` package name is required.
+or point Zed to a specific binary:
 
-Make sure `~/.cargo/bin` is in your PATH. Syntax highlighting works without any prerequisites.
+```json
+{
+  "lsp": {
+    "gregorio-lsp": {
+      "binary": { "path": "/path/to/gregorio-lsp" }
+    }
+  }
+}
+```
+
+If you restrict `granted_extension_capabilities`, keep a `download_file`
+capability for `github.com` or install the server yourself. Syntax
+highlighting works without the server.
 
 ## Installation
 
