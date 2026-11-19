@@ -20,17 +20,22 @@ Adds support for **GABC/NABC** (Gregorian chant notation) files to [Zed](https:/
 - **Bracket Matching** — Auto-matching for `()`, `[]`, `{}`, and `<>`.
 - **Code Outline** — Headers appear in the document outline/symbols panel.
 - **Language Server** — Diagnostics, hover, completion, and document symbols via [gregorio-lsp](https://github.com/AISCGre-BR/gregorio-lsp).
-- **Document Formatting** — Format `.gabc` files via **Format Document** (`Alt+Shift+F` / `⌥⇧F`) or on save, powered by [grefmt](https://github.com/AISCGre-BR/gregorio-lsp) (part of `gregorio-lsp ≥ 0.9.0`).
+- **Quick Fixes** — Auto-fixes for many diagnostics (e.g. `bar-mixed-with-notes`, `line-break-not-at-end`, `nabc-space-in-code`) through Zed's code actions menu.
+- **Document Formatting** — Format `.gabc` files via **Format Document** (`Alt+Shift+F` / `⌥⇧F`) or on save, powered by [grefmt](https://github.com/AISCGre-BR/gregorio-lsp), including the word-per-line layout for long GABC+NABC scores.
 
 ## Prerequisites
 
 For **Language Server** features (diagnostics, hover, completions, **formatting**):
 
-Install `gregorio-lsp` via Cargo (v0.9.0 or later includes the `grefmt` formatter):
+Install `gregorio-lsp` via Cargo (v0.13.0 recommended; v0.12.0 or later is
+required for `wordPerLine`):
 ```sh
-cargo install --git https://github.com/aiscgre-br/gregorio-lsp \
-  --tag v0.9.0 --bin gregorio-lsp
+cargo install --git https://github.com/AISCGre-BR/gregorio-lsp \
+  --tag v0.13.0 gregorio-server --bin gregorio-lsp
 ```
+
+Since gregorio-lsp v0.11.0 the repository is a Cargo workspace, so the
+`gregorio-server` package name is required.
 
 Make sure `~/.cargo/bin` is in your PATH. Syntax highlighting works without any prerequisites.
 
@@ -67,20 +72,28 @@ Formatting is provided by the `gregorio-lsp` language server (which embeds `gref
   }
   ```
 
-### Formatter options
+## Configuration
 
-Configure via the `formatting` key in Zed's LSP settings (`settings.json`):
+The extension forwards the `settings` object of `lsp.gregorio-lsp` in Zed's
+`settings.json` to the server. All keys are optional; the values below are the
+defaults:
 
 ```json
 {
   "lsp": {
     "gregorio-lsp": {
-      "initialization_options": {},
       "settings": {
+        "linting": {
+          "enabled": true,
+          "severity": "info",
+          "onSave": false,
+          "ignoreRules": []
+        },
         "formatting": {
           "maxLineWidth": 80,
-          "breakAfterClef": false,
-          "breakAfterBar": false
+          "breakAfterClef": true,
+          "breakAfterBar": true,
+          "wordPerLine": "auto"
         }
       }
     }
@@ -88,11 +101,23 @@ Configure via the `formatting` key in Zed's LSP settings (`settings.json`):
 }
 ```
 
+### Linting options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `enabled` | boolean | `true` | Enable or disable diagnostics |
+| `severity` | `"error"` \| `"warning"` \| `"info"` | `"info"` | Minimum severity shown |
+| `onSave` | boolean | `false` | Lint only on save instead of on every change |
+| `ignoreRules` | string[] | `[]` | Rule codes to suppress, e.g. `isolated-strophae` or `quilisma-missing-connector` (see gregorio-lsp's [CONFIG.md](https://github.com/AISCGre-BR/gregorio-lsp/blob/main/CONFIG.md) for the full list) |
+
+### Formatting options
+
 | Option | Type | Default | Description |
 |---|---|---|---|
 | `maxLineWidth` | integer | `80` | Maximum characters per notation line |
-| `breakAfterClef` | boolean | `false` | Insert a blank line after each clef token |
-| `breakAfterBar` | boolean | `false` | Insert a blank line after each bar token |
+| `breakAfterClef` | boolean | `true` | Insert a blank line after each clef token |
+| `breakAfterBar` | boolean | `true` | Insert a blank line after each bar token |
+| `wordPerLine` | `"auto"` \| `"always"` \| `"never"` | `"auto"` | Place each word on its own line (gregorio-lsp ≥ 0.12.0). `auto` enables it when the `nabc-lines` header is 2 or greater, or when at least 25% of the words are wider than half of `maxLineWidth`. Bars and `*` / `**` stay on the line of the preceding word. |
 
 ## License
 

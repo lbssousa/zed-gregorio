@@ -37,8 +37,8 @@ impl zed::Extension for GregorioExtension {
 
         Err("gregorio-lsp not found. Install it with:\n\
              \n\
-             cargo install --git https://github.com/aiscgre-br/gregorio-lsp \\\n\
-                            --tag v0.9.0 --bin gregorio-lsp\n\
+             cargo install --git https://github.com/AISCGre-BR/gregorio-lsp \\\n\
+                 --tag v0.13.0 gregorio-server --bin gregorio-lsp\n\
              \n\
              Make sure ~/.cargo/bin is in your PATH."
             .to_string())

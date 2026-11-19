@@ -5,8 +5,9 @@ line_comments = ["% "]
 tab_size = 2
 
 # Use gregorio-lsp's built-in formatter (powered by grefmt) for Format Document
-# and format-on-save. Options (maxLineWidth, breakAfterClef, breakAfterBar) are
-# configurable via the "formatting" key in workspace/didChangeConfiguration.
+# and format-on-save. Options (maxLineWidth, breakAfterClef, breakAfterBar,
+# wordPerLine) are configurable via the "formatting" key of
+# lsp.gregorio-lsp.settings in Zed's settings.json.
 formatter = { language_server = { name = "gregorio-lsp" } }
 
 brackets = [
