@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-11-19
+
+### Changed
+- `gregorio-lsp` recommended version updated to **v0.13.0**. Its new
+  diagnostics (`scandicus-intervals`, `isolated-strophae`,
+  `nabc-space-in-code`, `bar-mixed-with-notes`, `line-break-not-at-end`) and
+  their quick fixes are available without further changes.
+
+### Fixed
+- Install instructions (`src/lib.rs`, `README.md`): since gregorio-lsp v0.11.0
+  the repository is a Cargo workspace, so `cargo install` needs the
+  `gregorio-server` package name.
+- README: documented formatting defaults now match the server
+  (`breakAfterClef` / `breakAfterBar` default to `true`); added the
+  `wordPerLine` formatting option and the `linting` options (`enabled`,
+  `severity`, `onSave`, `ignoreRules`); removed the unused
+  `initialization_options` from the example.
+
+### Removed
+- Leftover debugging files (`highlights_out.txt`, `inspect_highlights.py`,
+  `kyrie_highlight.html`, `kyrie.gabc`, `nabc.gabc`).
+
+### CI
+- `actions/checkout` v4 → v7.
+
 ## [0.8.0] - 2026-05-23
 
 ### Added
